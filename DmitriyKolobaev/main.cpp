@@ -3,7 +3,9 @@
 #include <iostream>
 
 int main(int argc, char **argv) {
-    std::cout << "Hello world\n";
-    Matrix m(10, 10);
+    Matrix m(3, 3);
+    m[0][0] = 1;
+    m[2][2] = 2;
+    std::cout << m;
     return EXIT_SUCCESS;
 }

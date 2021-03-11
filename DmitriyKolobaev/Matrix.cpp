@@ -1,20 +1,33 @@
 #include "Matrix.hpp"
 
-Matrix::~Matrix() {
-    delete[](m_data);
-}
+Matrix::~Matrix() { delete[](m_data); }
 
-void Matrix::naive_mul(const Matrix& rhs) {
+void Matrix::naive_mul(const Matrix &rhs) {
     if (m_height != rhs.getWidth()) {
         return; // TODO Exception
     }
-    
-    
 }
 
-size_t Matrix::getWidth() const {
-    return m_width;
+int* Matrix::operator [](size_t index) {
+    return m_data + this->getWidth() * index;
 }
-size_t Matrix::setHeight() const {
-    return m_height;
+
+const int* Matrix::operator [](size_t index) const {
+    return m_data + this->getWidth() * index;
 }
+
+std::ostream& operator <<(std::ostream& os, const Matrix& m) {
+    for (size_t h = 0; h < m.getHeight(); h++)
+    {
+        for (size_t w = 0; w < m.getWidth(); w++)
+        {
+            os << m[h][w];
+            os << ' ';
+        }
+        os << '\n';
+    }
+    return os;
+}
+
+size_t Matrix::getWidth() const { return m_width; }
+size_t Matrix::getHeight() const { return m_height; }
