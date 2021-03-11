@@ -11,11 +11,12 @@ class Matrix {
     Matrix(size_t width, size_t height)
         : m_data(new int[width * height]), m_width(width), m_height(height){};
     ~Matrix();
-    void naive_mul(const Matrix &);
     size_t getWidth() const;
     size_t getHeight() const;
     int* operator [](size_t);
     const int* operator [](size_t) const;
 };
+
+Matrix naive_mul(const Matrix&, const Matrix &);
 
 std::ostream& operator <<(std::ostream& os, const Matrix& m);
