@@ -10,7 +10,7 @@ int main() {
         {0, 0, 3}
     });
     std::cout << diag << '\n';
-    Matrix A(3, 5);
+    Matrix A(5, 3);
     A.fill({
         {1, 1, 1},
         {1, 1, 1},
@@ -19,7 +19,6 @@ int main() {
         {1, 1, 1}
     });
     std::cout << A << '\n';
-    Matrix mul_res = naive_mul(A, diag);
-    std::cout << mul_res;
+    std::cout << naive_mul(A, diag);
     return EXIT_SUCCESS;
 }

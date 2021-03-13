@@ -9,7 +9,7 @@ Matrix naive_mul(const Matrix &lhs, const Matrix &rhs) {
 
     size_t n = lhs.getWidth();
 
-    Matrix result(rhs.getWidth(), lhs.getHeight());
+    Matrix result(lhs.getHeight(), rhs.getWidth());
 
     for (size_t row = 0; row < lhs.getHeight(); row++)
     {

@@ -9,7 +9,7 @@ class Matrix {
     size_t m_height;
 
   public:
-    Matrix(size_t width, size_t height)
+    Matrix(size_t height, size_t width)
         : m_data(new int[width * height]), m_width(width), m_height(height){};
     ~Matrix();
     void fill(const std::vector<std::vector<int>>& data);
