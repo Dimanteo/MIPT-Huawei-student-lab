@@ -26,6 +26,15 @@ Matrix naive_mul(const Matrix &lhs, const Matrix &rhs) {
     return result;
 }
 
+void Matrix::fill(const std::vector<std::vector<int>>& data) {
+    for (size_t row = 0; row < getHeight(); row++) {
+        int *cur_row = m_data + row * getWidth();
+        for (size_t col = 0; col < getWidth(); col++) {
+            cur_row[col] = data[row][col];
+        }
+    }
+}
+
 int* Matrix::operator [](size_t index) {
     return m_data + this->getWidth() * index;
 }

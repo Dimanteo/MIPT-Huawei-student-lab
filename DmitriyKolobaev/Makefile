@@ -1,5 +1,5 @@
 CC := g++
-CPPFLAGS := -Wall -Wextra -O0 -MD
+CPPFLAGS := -Wall -Wextra -O0 -MD -g
 
 all: m.out
 
