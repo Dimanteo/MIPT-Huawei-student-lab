@@ -1,11 +1,17 @@
 CC := g++
-CFLAGS = -Wall -Wextra -O0 -MD
+CPPFLAGS := -Wall -Wextra -O0 -MD
 
-all: main.o Matrix.o
-	$(CC) -o matrix.out $^
+all: m.out
+
+m.out: main.o Matrix.o
+	$(CC) -o m.out $^
+
+main.o: main.cpp
+
+Matrix.o: Matrix.cpp
 
 .PHONY: clean
 clean:
-	rm *.o *.out *.d
+	rm -rf *.o *.out *.d
 
 -include *.d
