@@ -1,4 +1,4 @@
-CC := g++
+CC := clang++
 CPPFLAGS := -Wall -Wextra -O0 -MD -g
 
 all: m.out

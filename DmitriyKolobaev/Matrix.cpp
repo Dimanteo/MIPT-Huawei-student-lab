@@ -1,41 +1,50 @@
 #include "Matrix.hpp"
+#include <cstdlib>
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
+
+static int argVerify(const Matrix &lhs, const Matrix &rhs, Matrix *res);
+
+static size_t getCacheLineSz();
 
 Matrix::~Matrix() { delete[](m_data); }
 
-static int arg_verify(const Matrix &lhs, const Matrix &rhs, Matrix *res) {
-    if (res == nullptr)
-        return -1;
-    if (lhs.getWidth() != rhs.getHeight())
-        return -1;
-    if (res->getHeight() != lhs.getHeight())
-        return -1;
-    if (res->getWidth() != rhs.getWidth())
-        return -1;
-    return 0;
-}
-
-int naive_mul(const Matrix &lhs, const Matrix &rhs, Matrix *res) {
-    if (arg_verify(lhs, rhs, res) < 0)
+int naiveMul(const Matrix &mlhs, const Matrix &mrhs, Matrix *mres) {
+    if (argVerify(mlhs, mrhs, mres) < 0)
         return -1;
 
-    size_t n = lhs.getWidth();
+    size_t n = mlhs.getWidth();
+    int *res = mres->getData();
+    int *lhs = mlhs.getData();
+    int *rhs = mrhs.getData();
 
-    for (size_t row = 0; row < lhs.getHeight(); row++) {
-        for (size_t col = 0; col < rhs.getWidth(); col++) {
-            (*res)[row][col] = 0;
+    for (size_t row = 0; row < mlhs.getHeight(); row++) {
+        for (size_t col = 0; col < mrhs.getWidth(); col++) {
+            int sum = 0;
             for (size_t i = 0; i < n; i++) {
-                (*res)[row][col] += lhs[row][i] * rhs[i][col];
+                sum += lhs[row * mrhs.getWidth() + i] * rhs[i * mrhs.getWidth() + col];
             }
+            res[row * mrhs.getWidth() + col] = sum;
         }
     }
     return 0;
 }
 
-int opt_mul(const Matrix &lhs, const Matrix &rhs, Matrix *res) {
-    if (arg_verify < 0)
+int optimalMul(const Matrix &mlhs, const Matrix &mrhs, Matrix *mres) {
+    if (argVerify(mlhs, mrhs, mres) < 0)
         return -1;
 
-    // TODO cache-friendly algorithm
+    int *lhs = mlhs.getData();
+    int *rhs = mrhs.getData();
+    int *res = mres->getData();
+
+    size_t lineSz = getCacheLineSz();
+    size_t rowLen = mlhs.getHeight();
+    
+    
     return 0;
 }
 
@@ -69,3 +78,28 @@ std::ostream &operator<<(std::ostream &os, const Matrix &m) {
 
 size_t Matrix::getWidth() const { return m_width; }
 size_t Matrix::getHeight() const { return m_height; }
+int* Matrix::getData() const { return m_data; }
+
+static int argVerify(const Matrix &lhs, const Matrix &rhs, Matrix *res) {
+    if (res == nullptr)
+        return -1;
+    if (lhs.getWidth() != rhs.getHeight())
+        return -1;
+    if (res->getHeight() != lhs.getHeight())
+        return -1;
+    if (res->getWidth() != rhs.getWidth())
+        return -1;
+    return 0;
+}
+
+static size_t getCacheLineSz() {
+    const char *cacheInfoDir = "/sys/devices/system/cpu/cpu0/cache/index0/coherency_line_size";
+    int fd = open(cacheInfoDir, O_RDONLY);
+    if (fd < 0)
+        return 0;
+    char clSize[4] = "";
+    int ret = read(fd, clSize, sizeof(clSize));
+    if (ret < 0)
+        return 0;
+    return strtoul(clSize, NULL, 10);
+}

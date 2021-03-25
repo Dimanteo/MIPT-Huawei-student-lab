@@ -1,7 +1,6 @@
 #pragma once
-#include <cstdlib>
-#include <ostream>
 #include <vector>
+#include <ostream>
 
 class Matrix {
     int *m_data;
@@ -15,12 +14,13 @@ class Matrix {
     void fill(const std::vector<std::vector<int>> &data);
     size_t getWidth() const;
     size_t getHeight() const;
+    int* getData() const;
     int *operator[](size_t);
     const int *operator[](size_t) const;
 };
 
-int naive_mul(const Matrix &lhs, const Matrix &rhs, Matrix *res);
+int naiveMul(const Matrix &lhs, const Matrix &rhs, Matrix *res);
 
-int opt_mul(const Matrix &lhs, const Matrix &rhs, Matrix *res);
+int optimalMul(const Matrix &lhs, const Matrix &rhs, Matrix *res);
 
 std::ostream &operator<<(std::ostream &os, const Matrix &m);
